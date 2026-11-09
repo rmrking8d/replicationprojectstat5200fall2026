@@ -49,7 +49,7 @@ be saved separately.
 - `data/raw/` — original, unmodified data
 - `data/clean/` — cleaned and analysis-ready data
 - `results/figures/` — replicated and generated figures
-- `results/tables/` — replicated and generated tables (CSV, LaTeX, PDF, and PNG)
+- `results/tables/` — replicated and generated tables (CSV, PDF, and PNG)
 
 ## Reproducibility
 

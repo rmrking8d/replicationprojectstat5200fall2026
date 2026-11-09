@@ -111,13 +111,6 @@ def condition_sample(data: pd.DataFrame, conditions: Sequence[int]) -> pd.DataFr
 
 
 def save_table(data: pd.DataFrame, name: str) -> None:
-    """Save a result table as both CSV and LaTeX for inspection and reuse."""
+    """Save a result table as CSV for inspection and reuse."""
     TABLES_DIR.mkdir(parents=True, exist_ok=True)
     data.to_csv(TABLES_DIR / f"{name}.csv", index=False, float_format="%.6f")
-    data.to_latex(
-        TABLES_DIR / f"{name}.tex",
-        index=False,
-        float_format=lambda value: f"{value:.3f}",
-        na_rep="",
-        escape=False,
-    )
