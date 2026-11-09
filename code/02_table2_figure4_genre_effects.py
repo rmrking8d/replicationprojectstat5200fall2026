@@ -133,18 +133,25 @@ def render_table2(table: pd.DataFrame) -> None:
     """Create a paper-style table of genre-ad match-value estimates."""
     rows: list[tuple[str, list[str]]] = []
     panels = [
-        ("Lost Girls", "Panel A. Advertising for Lost Girls", "romance"),
-        ("Stateline", "Panel B. Advertising for Stateline", "mystery"),
-        ("Pooled", "Panel C. Pooling both books", "advertised genre"),
+        ("Lost Girls", "Panel A. Advertising for Lost Girls", "Lost Girls", "romance"),
+        ("Stateline", "Panel B. Advertising for Stateline", "Stateline", "mystery"),
+        ("Pooled", "Panel C. Pooling Both Books", "advertised book", "ad genre"),
     ]
     preference_groups = [
-        ("Ranked advertised genre 1st", "ranked 1st"),
-        ("Ranked advertised genre 2nd-5th", "ranked 2nd-5th"),
+        ("Ranked advertised genre 1st", "1st"),
+        ("Ranked advertised genre 2nd-5th", "2nd-5th"),
     ]
 
-    for panel, heading, genre in panels:
-        rows.append(("section", [heading, "", "", "", "", ""]))
+    for panel, heading, book_name, genre in panels:
+        rows.append(("panel", [heading, "", "", "", "", ""]))
         for outcome in ("Search", "Purchase"):
+            measure = "search" if outcome == "Search" else "buy"
+            rows.append(
+                (
+                    "subsection",
+                    [f"Prob. {measure} {book_name}:", "", "", "", "", ""],
+                )
+            )
             for group, group_label in preference_groups:
                 estimate = table.loc[
                     table["panel"].eq(panel)
@@ -155,7 +162,7 @@ def render_table2(table: pd.DataFrame) -> None:
                     (
                         "data",
                         [
-                            f"{outcome}: {genre} {group_label}",
+                            f"Consumers who ranked {genre} {group_label}",
                             format_table_value(estimate["plain_ad_mean"]),
                             format_table_value(estimate["genre_ad_mean"]),
                             format_table_value(estimate["estimate"]),
@@ -168,10 +175,10 @@ def render_table2(table: pd.DataFrame) -> None:
     save_publication_table(
         "table2_genre_match_value",
         "Table 2. Match-value effects of genre advertising",
-        ["Outcome and preference group", "Plain Ad", "Genre Ad", "Estimate", "S.E.", "p-value"],
+        ["", "Plain Ad", "Genre Ad", "Estimate", "S.E.", "p-value"],
         rows,
         [0.46, 0.11, 0.11, 0.12, 0.09, 0.11],
-        note="Treatment effects are Genre Ad minus Plain Ad; standard errors are HC1 robust.",
+        note="OLS estimates with HC1 robust standard errors.",
     )
 
 
@@ -227,7 +234,7 @@ def figure4_summary(data: pd.DataFrame) -> pd.DataFrame:
 def plot_figure4(summary: pd.DataFrame) -> None:
     """Save the two-panel Figure 4 showing search rates across preference ranks."""
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
-    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.6), sharey=False)
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 4.2), sharey=False)
 
     for axis, panel in zip(
         axes,
@@ -250,23 +257,31 @@ def plot_figure4(summary: pd.DataFrame) -> None:
                     marker=marker,
                     color=color,
                     linestyle="--" if ad_type != "Plain Ad" else "-",
+                    linewidth=1.5,
+                    markersize=5,
                     label=ad_type,
                 )
 
         axis.set_xticks([1, 2, 3, 4, 5], ["1st", "2nd", "3rd", "4th", "5th"])
-        axis.set_xlabel("Stated taste for the advertised genre (rank)")
-        axis.set_ylabel("Search rate (advertised book)")
+        axis.set_xlabel("Stated taste for the advertised genre (rank)", fontsize=9, labelpad=4)
+        axis.set_ylabel("Search rate (advertised book)", fontsize=9, labelpad=4)
         axis.set_title(
-            "(a) Genre ads polarize search probabilities"
+            "(A) Genre Ads Polarize Search Probabilities"
             if panel == "Plain vs Genre"
-            else "(b) Price ads increase search probabilities"
+            else "(B) Price Ads Increase Search Probabilities",
+            fontsize=10,
+            pad=7,
         )
-        axis.grid(axis="y", alpha=0.2)
-        axis.legend(frameon=False)
+        axis.grid(False)
+        axis.spines[["top", "right"]].set_visible(False)
+        axis.spines["left"].set_linewidth(0.65)
+        axis.spines["bottom"].set_linewidth(0.65)
+        axis.tick_params(axis="both", labelsize=8, length=2.5, width=0.6)
+        axis.legend(frameon=False, loc="upper right", fontsize=8)
 
-    fig.tight_layout()
+    fig.subplots_adjust(left=0.08, right=0.99, bottom=0.18, top=0.88, wspace=0.30)
     fig.savefig(FIGURES_DIR / "figure4_preference_effects.png", dpi=300, bbox_inches="tight")
-    fig.savefig(FIGURES_DIR / "figure4_preference_effects.pdf", bbox_inches="tight")
+    fig.savefig(FIGURES_DIR / "figure4_preference_effects.pdf")
     plt.close(fig)
 
 

@@ -1,4 +1,4 @@
-"""Render analysis tables as clean, paper-style PDF and PNG files."""
+"""Render analysis tables as compact, paper-style PDF and PNG files."""
 
 from __future__ import annotations
 
@@ -33,54 +33,55 @@ def save_publication_table(
     column_groups: list[tuple[int, int, str]] | None = None,
     note: str | None = None,
 ) -> None:
-    """Save a lightly ruled, publication-style table as PDF and PNG."""
+    """Save a lightly ruled table with the compact spacing of the paper tables."""
     if len(columns) != len(column_widths):
         raise ValueError("Each table column must have a corresponding width")
     if any(len(values) != len(columns) for _, values in rows):
         raise ValueError("Every table row must have one value per column")
-    if any(kind not in {"section", "subsection", "data"} for kind, _ in rows):
+    if any(kind not in {"panel", "heading", "section", "subsection", "data"} for kind, _ in rows):
         raise ValueError("Table rows must be sections, subsections, or data")
+    if any(start >= end or start < 0 or end > len(columns) for start, end, _ in column_groups or []):
+        raise ValueError("Column group bounds must match the table columns")
 
     TABLES_DIR.mkdir(parents=True, exist_ok=True)
-    width_sum = sum(column_widths)
-    normalized_widths = [width / width_sum for width in column_widths]
-    x_edges = np.cumsum([0.0, *normalized_widths])
+    widths = np.asarray(column_widths, dtype=float)
+    if (widths <= 0).any():
+        raise ValueError("Column widths must be positive")
+    x_edges = np.concatenate(([0.0], np.cumsum(widths / widths.sum())))
 
-    row_inches = sum(
-        0.34 if kind == "section" else 0.30 if kind == "subsection" else 0.29
+    row_units = [
+        1.15 if kind in {"panel", "section"} else 1.05 if kind == "subsection" else 1.0
         for kind, _ in rows
-    )
-    header_inches = 0.64 if column_groups else 0.39
-    note_inches = 0.35 if note else 0.0
-    content_inches = row_inches + header_inches + note_inches
-    figure_height = max(2.6, 0.25 + content_inches / 0.78)
-    figure, axis = plt.subplots(figsize=(12.0, figure_height))
+    ]
+    header_units = 1.7 if column_groups else 1.0
+    note_units = 0.9 if note else 0.0
+    vertical_units = 0.9 + header_units + sum(row_units) + note_units + 0.25
+    figure_height = max(3.0, vertical_units * 0.24)
+    figure, axis = plt.subplots(figsize=(7.5, figure_height))
     figure.subplots_adjust(left=0, right=1, bottom=0, top=1)
     axis.set_xlim(0, 1)
     axis.set_ylim(0, 1)
     axis.axis("off")
 
-    left = 0.025
-    right = 0.975
-    usable_width = right - left
-    x_positions = left + x_edges * usable_width
+    left, right = 0.035, 0.965
+    x_positions = left + x_edges * (right - left)
+    axis_height_inches = figure_height
 
     axis.text(
         left,
-        0.975,
+        1 - 0.12 / axis_height_inches,
         title,
         ha="left",
         va="top",
-        fontsize=13,
+        fontsize=10,
         fontweight="bold",
         fontfamily="serif",
         transform=axis.transAxes,
     )
 
-    axis_height_inches = figure_height
-    y = 0.86
+    y = 1 - 0.42 / axis_height_inches
+    group_height = 0.23 / axis_height_inches if column_groups else 0.0
     if column_groups:
-        group_height = 0.22 / axis_height_inches
         for start, end, label in column_groups:
             axis.text(
                 (x_positions[start] + x_positions[end]) / 2,
@@ -88,36 +89,36 @@ def save_publication_table(
                 label,
                 ha="center",
                 va="center",
-                fontsize=9.5,
+                fontsize=8,
                 fontweight="bold",
                 fontfamily="serif",
                 transform=axis.transAxes,
             )
         y -= group_height
 
-    header_height = 0.35 / axis_height_inches
+    header_height = 0.31 / axis_height_inches
     axis.plot(
         [left, right],
-        [y + header_height * 0.54] * 2,
+        [y + 0.17 / axis_height_inches] * 2,
         color="black",
-        linewidth=0.8,
+        linewidth=0.55,
         transform=axis.transAxes,
         clip_on=False,
     )
-    for column_index, label in enumerate(columns):
-        is_label_column = column_index == 0
+    for index, label in enumerate(columns):
+        is_label_column = index == 0
         x = (
-            x_positions[column_index] + 0.006
+            x_positions[index] + 0.006
             if is_label_column
-            else x_positions[column_index + 1] - 0.006
+            else x_positions[index + 1] - 0.006
         )
         axis.text(
             x,
-            y,
+            y - 0.04 / axis_height_inches,
             label,
             ha="left" if is_label_column else "right",
             va="center",
-            fontsize=9,
+            fontsize=7.6,
             fontweight="bold",
             fontfamily="serif",
             transform=axis.transAxes,
@@ -125,47 +126,54 @@ def save_publication_table(
     y -= header_height
     axis.plot(
         [left, right],
-        [y + header_height * 0.46] * 2,
+        [y + 0.14 / axis_height_inches] * 2,
         color="black",
-        linewidth=0.8,
+        linewidth=0.55,
         transform=axis.transAxes,
         clip_on=False,
     )
 
-    for kind, values in rows:
-        row_inches = (
-            0.34 if kind == "section" else 0.30 if kind == "subsection" else 0.29
-        )
-        row_height = row_inches / axis_height_inches
+    for (kind, values), row_unit in zip(rows, row_units, strict=True):
+        row_height = row_unit * 0.24 / axis_height_inches
         row_y = y - row_height / 2
-        if kind in {"section", "subsection"}:
+        if kind in {"panel", "heading", "section", "subsection"}:
             axis.text(
-                x_positions[0] + 0.006,
+                x_positions[0] + (0.006 if kind == "section" else 0.012),
                 row_y,
                 values[0],
                 ha="left",
                 va="center",
-                fontsize=9.5 if kind == "section" else 9,
+                fontsize=8 if kind in {"panel", "heading", "section"} else 7.7,
                 fontweight="bold",
+                fontstyle="italic" if kind in {"panel", "subsection"} else "normal",
                 fontfamily="serif",
                 transform=axis.transAxes,
             )
-            if kind == "section":
+            if kind in {"panel", "section"}:
                 axis.plot(
                     [left, right],
-                    [y - row_height * 0.15] * 2,
+                    [y - 0.025 / axis_height_inches] * 2,
                     color="black",
-                    linewidth=0.45,
+                    linewidth=0.4,
+                    transform=axis.transAxes,
+                    clip_on=False,
+                )
+            if kind == "panel":
+                axis.plot(
+                    [left, right],
+                    [y - row_height + 0.025 / axis_height_inches] * 2,
+                    color="black",
+                    linewidth=0.4,
                     transform=axis.transAxes,
                     clip_on=False,
                 )
         else:
-            for column_index, value in enumerate(values):
-                is_label_column = column_index == 0
+            for index, value in enumerate(values):
+                is_label_column = index == 0
                 x = (
-                    x_positions[column_index] + 0.006
+                    x_positions[index] + 0.012
                     if is_label_column
-                    else x_positions[column_index + 1] - 0.006
+                    else x_positions[index + 1] - 0.006
                 )
                 axis.text(
                     x,
@@ -173,7 +181,7 @@ def save_publication_table(
                     value,
                     ha="left" if is_label_column else "right",
                     va="center",
-                    fontsize=8.8,
+                    fontsize=7.5,
                     fontfamily="serif",
                     transform=axis.transAxes,
                 )
@@ -181,20 +189,20 @@ def save_publication_table(
 
     axis.plot(
         [left, right],
-        [y - 0.10 / axis_height_inches] * 2,
+        [y] * 2,
         color="black",
-        linewidth=0.8,
+        linewidth=0.55,
         transform=axis.transAxes,
         clip_on=False,
     )
     if note:
         axis.text(
             left,
-            max(0.015, y - 0.25 / axis_height_inches),
+            y - 0.12 / axis_height_inches,
             note,
             ha="left",
             va="top",
-            fontsize=8,
+            fontsize=6.8,
             fontfamily="serif",
             transform=axis.transAxes,
         )

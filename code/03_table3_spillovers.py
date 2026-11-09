@@ -113,12 +113,12 @@ def render_table3(table: pd.DataFrame) -> None:
     """Create a paper-style table of price- and genre-ad spillover estimates."""
     rows: list[tuple[str, list[str]]] = []
     panels = [
-        ("Price advertising", "Panel A. Spillovers from price ads"),
-        ("Genre advertising", "Panel B. Spillovers from genre ads"),
+        ("Price advertising", "Panel A. Spillovers from price ads:"),
+        ("Genre advertising", "Panel B. Spillovers from genre ads:"),
     ]
 
     for panel, heading in panels:
-        rows.append(("section", [heading, "", "", "", "", ""]))
+        rows.append(("panel", [heading, "", "", "", "", ""]))
         for _, estimate in table.loc[table["panel"].eq(panel)].iterrows():
             rows.append(
                 (
@@ -136,11 +136,11 @@ def render_table3(table: pd.DataFrame) -> None:
 
     save_publication_table(
         "table3_advertising_spillovers",
-        "Table 3. Spillovers from advertising",
-        ["Outcome", "Plain Ad", "Attribute Ad", "Estimate", "S.E.", "p-value"],
+        "Table 3. Spillovers from advertising: pooling both books",
+        ["", "Plain Ad", "Attribute Ad", "Estimate", "S.E.", "p-value"],
         rows,
         [0.48, 0.11, 0.13, 0.11, 0.08, 0.09],
-        note="Treatment effects are Attribute Ad minus Plain Ad; standard errors are HC1 robust.",
+        note="OLS estimates with HC1 robust standard errors.",
     )
 
 

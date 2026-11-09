@@ -45,39 +45,56 @@ def plot_figure5(summary: pd.DataFrame) -> None:
     positions = list(ranks)
     width = 0.36
 
-    fig, axis = plt.subplots(figsize=(7.4, 4.7))
+    fig, axis = plt.subplots(figsize=(6.0, 4.4))
     axis.bar(
         [rank - width / 2 for rank in positions],
         romance.loc[positions, "share"],
         width,
-        color="#ff67a4",
+        color="#f65a9b",
         edgecolor="black",
-        linewidth=0.5,
+        linewidth=0.45,
         label="Romance",
     )
     axis.bar(
         [rank + width / 2 for rank in positions],
         mystery.loc[positions, "share"],
         width,
-        color="#777777",
+        color="#4d4d4d",
         edgecolor="black",
-        linewidth=0.5,
+        linewidth=0.45,
         label="Mystery",
     )
     axis.set_xticks(positions, ["1", "2", "3", "4", "5"])
-    axis.set_xlabel("Stated taste for the genre (rank)")
-    axis.set_ylabel("Percent of participants")
-    axis.set_title("Stated preference over romance and mystery genres")
-    axis.yaxis.set_major_formatter(
-        matplotlib.ticker.PercentFormatter(xmax=1)
+    axis.set_xlabel("Stated taste for the genre (rank)", fontsize=9, labelpad=4)
+    axis.set_ylabel("Share of participants", fontsize=9, labelpad=4)
+    axis.set_title("Stated preference over romance and mystery genres", fontsize=10, pad=7)
+    axis.set_ylim(0, 0.41)
+    axis.set_yticks(
+        [0, 0.1, 0.2, 0.3, 0.4],
+        ["0", ".1", ".2", ".3", ".4"],
     )
-    axis.legend(frameon=False, loc="upper right")
-    axis.grid(axis="y", alpha=0.2)
+    axis.legend(
+        frameon=True,
+        facecolor="white",
+        edgecolor="#555555",
+        fancybox=False,
+        loc="upper center",
+        ncol=2,
+        fontsize=8,
+        bbox_to_anchor=(0.5, 1.0),
+        borderpad=0.35,
+        handlelength=1.5,
+    )
+    axis.grid(axis="y", color="#e5e5e5", linewidth=0.55)
     axis.set_axisbelow(True)
+    axis.spines[["top", "right"]].set_visible(False)
+    axis.spines["left"].set_linewidth(0.65)
+    axis.spines["bottom"].set_linewidth(0.65)
+    axis.tick_params(axis="both", labelsize=8, length=2.5, width=0.6)
 
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "figure5_genre_preferences.png", dpi=300, bbox_inches="tight")
-    fig.savefig(FIGURES_DIR / "figure5_genre_preferences.pdf", bbox_inches="tight")
+    fig.subplots_adjust(left=0.14, right=0.98, bottom=0.15, top=0.86)
+    fig.savefig(FIGURES_DIR / "figure5_genre_preferences.png", dpi=300, facecolor="white")
+    fig.savefig(FIGURES_DIR / "figure5_genre_preferences.pdf", facecolor="white")
     plt.close(fig)
 
 

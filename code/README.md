@@ -45,4 +45,6 @@ checksums, CSV row counts and columns, and ZIP validation results.
 `00_build_analysis_data.py` creates `data/clean/analysis_sample.csv` and
 `results/data_build_report.json`. The analysis scripts save CSV and LaTeX
 tables under `results/tables/`, paper-style PDF and PNG versions of Tables 1–3
-in the same folder, and PDF/PNG figures under `results/figures/`.
+in the same folder, and PDF/PNG figures under `results/figures/`. Figure 3 is
+also saved as separate Figure 3a search and Figure 3b purchase charts for direct
+comparison with the authors' versions.
