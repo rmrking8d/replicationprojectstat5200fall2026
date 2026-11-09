@@ -49,16 +49,7 @@ be saved separately.
 - `data/raw/` — original, unmodified data
 - `data/clean/` — cleaned and analysis-ready data
 - `results/figures/` — replicated and generated figures
-- `results/tables/` — replicated and generated tables
-
-## Current status
-
-The Python workflow and preliminary tables and figures have been generated.
-The current analysis sample contains 11,502 participants, compared with 11,498
-in the authors' processed data. Some search estimates also differ, so the
-outputs are not yet considered an exact replication. See
-[`code/README.md`](code/README.md) for run instructions and the current
-validation status.
+- `results/tables/` — replicated and generated tables (CSV, LaTeX, PDF, and PNG)
 
 ## Reproducibility
 

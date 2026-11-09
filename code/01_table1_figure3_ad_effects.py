@@ -20,6 +20,7 @@ from analysis_common import (
     robust_linear_contrast,
     save_table,
 )
+from table_rendering import format_table_value, save_publication_table
 
 
 BOOKS = {
@@ -89,6 +90,49 @@ def estimate_table1(data: pd.DataFrame) -> pd.DataFrame:
                 )
 
     return pd.DataFrame(rows)
+
+
+def render_table1(table: pd.DataFrame) -> None:
+    """Create a compact, paper-style version of Table 1."""
+    rows: list[tuple[str, list[str]]] = []
+    effects = [label for label, _ in TREATMENT_ROWS]
+    contrasts = [label for label, _ in CONTRAST_ROWS]
+
+    for book in BOOKS:
+        rows.append(("section", [book, "", "", "", "", "", ""]))
+        for effect in effects + contrasts:
+            if effect == contrasts[0]:
+                rows.append(
+                    (
+                        "subsection",
+                        ["Implied ATE differences", "", "", "", "", "", ""],
+                    )
+                )
+            values = [effect]
+            for outcome in ("Search", "Purchase"):
+                estimate = table.loc[
+                    table["book"].eq(book)
+                    & table["outcome"].eq(outcome)
+                    & table["effect"].eq(effect)
+                ].iloc[0]
+                values.extend(
+                    format_table_value(
+                        estimate[column],
+                        p_value=column == "p_value",
+                    )
+                    for column in ("estimate", "standard_error", "p_value")
+                )
+            rows.append(("data", values))
+
+    save_publication_table(
+        "table1_ad_effects",
+        "Table 1. Advertising effects on searches and purchases",
+        ["Effect", "Est.", "S.E.", "p-value", "Est.", "S.E.", "p-value"],
+        rows,
+        [0.28, 0.12, 0.10, 0.14, 0.12, 0.10, 0.14],
+        column_groups=[(1, 4, "Search"), (4, 7, "Purchase")],
+        note="OLS estimates with HC1 robust standard errors.",
+    )
 
 
 def _mean_confidence_interval(values: pd.Series) -> tuple[float, float, float]:
@@ -198,6 +242,7 @@ def main() -> None:
     table = estimate_table1(data)
     summary = figure3_summary(data)
     save_table(table, "table1_ad_effects")
+    render_table1(table)
     save_table(summary, "figure3_ad_effects_summary")
     plot_figure3(summary)
     print(f"Saved Table 1 and Figure 3 outputs for {len(data):,} participants.")

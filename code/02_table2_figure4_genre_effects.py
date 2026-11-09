@@ -17,6 +17,7 @@ from analysis_common import (
     load_analysis_sample,
     save_table,
 )
+from table_rendering import format_table_value, save_publication_table
 
 
 def _table_row(
@@ -128,6 +129,52 @@ def estimate_table2(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def render_table2(table: pd.DataFrame) -> None:
+    """Create a paper-style table of genre-ad match-value estimates."""
+    rows: list[tuple[str, list[str]]] = []
+    panels = [
+        ("Lost Girls", "Panel A. Advertising for Lost Girls", "romance"),
+        ("Stateline", "Panel B. Advertising for Stateline", "mystery"),
+        ("Pooled", "Panel C. Pooling both books", "advertised genre"),
+    ]
+    preference_groups = [
+        ("Ranked advertised genre 1st", "ranked 1st"),
+        ("Ranked advertised genre 2nd-5th", "ranked 2nd-5th"),
+    ]
+
+    for panel, heading, genre in panels:
+        rows.append(("section", [heading, "", "", "", "", ""]))
+        for outcome in ("Search", "Purchase"):
+            for group, group_label in preference_groups:
+                estimate = table.loc[
+                    table["panel"].eq(panel)
+                    & table["outcome"].eq(outcome)
+                    & table["preference_group"].eq(group)
+                ].iloc[0]
+                rows.append(
+                    (
+                        "data",
+                        [
+                            f"{outcome}: {genre} {group_label}",
+                            format_table_value(estimate["plain_ad_mean"]),
+                            format_table_value(estimate["genre_ad_mean"]),
+                            format_table_value(estimate["estimate"]),
+                            format_table_value(estimate["standard_error"]),
+                            format_table_value(estimate["p_value"], p_value=True),
+                        ],
+                    )
+                )
+
+    save_publication_table(
+        "table2_genre_match_value",
+        "Table 2. Match-value effects of genre advertising",
+        ["Outcome and preference group", "Plain Ad", "Genre Ad", "Estimate", "S.E.", "p-value"],
+        rows,
+        [0.46, 0.11, 0.11, 0.12, 0.09, 0.11],
+        note="Treatment effects are Genre Ad minus Plain Ad; standard errors are HC1 robust.",
+    )
+
+
 def _rank_specific_means(
     sample: pd.DataFrame,
     conditions: list[int],
@@ -228,6 +275,7 @@ def main() -> None:
     table = estimate_table2(data)
     summary = figure4_summary(data)
     save_table(table, "table2_genre_match_value")
+    render_table2(table)
     save_table(summary, "figure4_preference_search_rates")
     plot_figure4(summary)
     print(f"Saved Table 2 and Figure 4 outputs for {len(data):,} participants.")

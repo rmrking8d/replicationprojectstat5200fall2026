@@ -10,6 +10,7 @@ from analysis_common import (
     load_analysis_sample,
     save_table,
 )
+from table_rendering import format_table_value, save_publication_table
 
 
 PRICE_OUTCOMES = [
@@ -108,10 +109,46 @@ def estimate_table3(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def render_table3(table: pd.DataFrame) -> None:
+    """Create a paper-style table of price- and genre-ad spillover estimates."""
+    rows: list[tuple[str, list[str]]] = []
+    panels = [
+        ("Price advertising", "Panel A. Spillovers from price ads"),
+        ("Genre advertising", "Panel B. Spillovers from genre ads"),
+    ]
+
+    for panel, heading in panels:
+        rows.append(("section", [heading, "", "", "", "", ""]))
+        for _, estimate in table.loc[table["panel"].eq(panel)].iterrows():
+            rows.append(
+                (
+                    "data",
+                    [
+                        estimate["outcome"],
+                        format_table_value(estimate["plain_ad_mean"]),
+                        format_table_value(estimate["attribute_ad_mean"]),
+                        format_table_value(estimate["estimate"]),
+                        format_table_value(estimate["standard_error"]),
+                        format_table_value(estimate["p_value"], p_value=True),
+                    ],
+                )
+            )
+
+    save_publication_table(
+        "table3_advertising_spillovers",
+        "Table 3. Spillovers from advertising",
+        ["Outcome", "Plain Ad", "Attribute Ad", "Estimate", "S.E.", "p-value"],
+        rows,
+        [0.48, 0.11, 0.13, 0.11, 0.08, 0.09],
+        note="Treatment effects are Attribute Ad minus Plain Ad; standard errors are HC1 robust.",
+    )
+
+
 def main() -> None:
     data = load_analysis_sample()
     table = estimate_table3(data)
     save_table(table, "table3_advertising_spillovers")
+    render_table3(table)
     print(f"Saved Table 3 output for {len(data):,} participants.")
 
 
