@@ -1,0 +1,7 @@
+matplotlib
+jinja2
+numpy
+pandas
+pyreadstat
+scipy
+statsmodels

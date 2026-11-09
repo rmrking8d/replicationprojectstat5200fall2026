@@ -1,0 +1,22 @@
+{
+  "source_repository": "https://github.com/ilyamorozov/adContent",
+  "source_revision": "b9f5c0293fc516949e9e2d294caaab57885614c7",
+  "raw_survey_records": 24930,
+  "raw_google_analytics_events": 814539,
+  "events_in_matched_survey_windows": 493911,
+  "eligible_survey_attempts": 18557,
+  "eligible_attempts_matched": 13563,
+  "unique_survey_participants_matched": 13206,
+  "ambiguous_matches": 22,
+  "multiple_ad_exposure_participants": 153,
+  "assignment_exposure_mismatches": 60,
+  "missing_ad_condition": 16,
+  "participants_with_ad_assignment": 12990,
+  "participants_with_mapped_book_code": 11502,
+  "participants_missing_or_unmapped_book_code": 1488,
+  "participants_in_paper_analysis_sample": 11502,
+  "analysis_sample_size": 11502,
+  "paper_reported_sample_size": 11498,
+  "matches_paper_sample_size": false,
+  "sample_size_note": "Sample differs from the paper; inspect matching, assignment, and purchase-code diagnostics before treating estimates as replicated."
+}

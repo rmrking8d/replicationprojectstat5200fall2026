@@ -1,0 +1,13 @@
+panel,outcome,preference_group,plain_ad_mean,genre_ad_mean,estimate,standard_error,p_value,n
+Lost Girls,Search,Ranked advertised genre 1st,0.107595,0.139535,0.031940,0.025590,0.212429,660
+Lost Girls,Search,Ranked advertised genre 2nd-5th,0.125251,0.090473,-0.034778,0.011396,0.002295,2952
+Lost Girls,Purchase,Ranked advertised genre 1st,0.079114,0.101744,0.022630,0.022310,0.310787,660
+Lost Girls,Purchase,Ranked advertised genre 2nd-5th,0.059612,0.047978,-0.011633,0.008301,0.161165,2952
+Stateline,Search,Ranked advertised genre 1st,0.157390,0.220149,0.062760,0.023999,0.009047,1057
+Stateline,Search,Ranked advertised genre 2nd-5th,0.108251,0.097310,-0.010941,0.011945,0.359767,2585
+Stateline,Purchase,Ranked advertised genre 1st,0.099808,0.125000,0.025192,0.019422,0.194891,1057
+Stateline,Purchase,Ranked advertised genre 2nd-5th,0.065102,0.064082,-0.001020,0.009674,0.916048,2585
+Pooled,Search,Ranked advertised genre 1st,0.138590,0.188636,0.050046,0.017802,0.004992,1717
+Pooled,Search,Ranked advertised genre 2nd-5th,0.117271,0.093647,-0.023624,0.008245,0.004183,5537
+Pooled,Purchase,Ranked advertised genre 1st,0.091995,0.115909,0.023914,0.014714,0.104292,1717
+Pooled,Purchase,Ranked advertised genre 2nd-5th,0.062189,0.055454,-0.006736,0.006323,0.286785,5537

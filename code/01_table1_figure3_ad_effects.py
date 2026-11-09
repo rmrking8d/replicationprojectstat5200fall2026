@@ -1,0 +1,207 @@
+"""Reproduce Table 1 and Figure 3: effects of advertising on searches/purchases."""
+
+from __future__ import annotations
+
+import matplotlib
+
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import scipy.stats as stats
+
+from analysis_common import (
+    CONDITION_NAMES,
+    FIGURES_DIR,
+    condition_sample,
+    fit_robust_ols,
+    load_analysis_sample,
+    robust_linear_contrast,
+    save_table,
+)
+
+
+BOOKS = {
+    "Lost Girls": {
+        "conditions": [0, 1, 2, 3],
+        "search": "clicked_203",
+        "purchase": "purchased_203",
+    },
+    "Stateline": {
+        "conditions": [0, 4, 5, 6],
+        "search": "clicked_303",
+        "purchase": "purchased_303",
+    },
+}
+TREATMENT_ROWS = [
+    ("Plain ad", "ad_plain"),
+    ("Genre ad", "ad_genre"),
+    ("Price ad", "ad_price"),
+]
+CONTRAST_ROWS = [
+    ("Genre - Plain", {"ad_genre": 1, "ad_plain": -1}),
+    ("Price - Plain", {"ad_price": 1, "ad_plain": -1}),
+    ("Price - Genre", {"ad_price": 1, "ad_genre": -1}),
+]
+
+
+def estimate_table1(data: pd.DataFrame) -> pd.DataFrame:
+    """Estimate the unadjusted OLS treatment effects and planned contrasts."""
+    rows: list[dict[str, object]] = []
+
+    for book, specification in BOOKS.items():
+        sample = condition_sample(data, specification["conditions"])
+        sample["ad_plain"] = sample["ad_condition"].isin([2, 5]).astype(int)
+        sample["ad_genre"] = sample["ad_condition"].isin([1, 4]).astype(int)
+        sample["ad_price"] = sample["ad_condition"].isin([3, 6]).astype(int)
+        regressors = sample[["ad_plain", "ad_genre", "ad_price"]]
+
+        for outcome_label, outcome_column in (
+            ("Search", specification["search"]),
+            ("Purchase", specification["purchase"]),
+        ):
+            result = fit_robust_ols(sample, outcome_column, regressors)
+
+            for treatment_label, coefficient in TREATMENT_ROWS:
+                rows.append(
+                    {
+                        "book": book,
+                        "outcome": outcome_label,
+                        "effect": treatment_label,
+                        "estimate": result.params[coefficient],
+                        "standard_error": result.bse[coefficient],
+                        "p_value": result.pvalues[coefficient],
+                        "n": int(result.nobs),
+                    }
+                )
+
+            for contrast_label, weights in CONTRAST_ROWS:
+                estimate = robust_linear_contrast(result, weights)
+                rows.append(
+                    {
+                        "book": book,
+                        "outcome": outcome_label,
+                        "effect": contrast_label,
+                        **estimate,
+                        "n": int(result.nobs),
+                    }
+                )
+
+    return pd.DataFrame(rows)
+
+
+def _mean_confidence_interval(values: pd.Series) -> tuple[float, float, float]:
+    """Return the sample mean and a two-sided 95% t confidence interval."""
+    values = values.dropna().astype(float)
+    mean = float(values.mean())
+    if len(values) < 2:
+        return mean, np.nan, np.nan
+    standard_error = float(stats.sem(values))
+    margin = float(stats.t.ppf(0.975, len(values) - 1) * standard_error)
+    return mean, mean - margin, mean + margin
+
+
+def figure3_summary(data: pd.DataFrame) -> pd.DataFrame:
+    """Calculate the condition-specific means and confidence intervals."""
+    rows: list[dict[str, object]] = []
+
+    for book, specification in BOOKS.items():
+        sample = condition_sample(data, specification["conditions"])
+        for condition in specification["conditions"]:
+            outcome_condition = sample.loc[sample["ad_condition"].eq(condition)]
+            for outcome, outcome_column in (
+                ("Search", specification["search"]),
+                ("Purchase", specification["purchase"]),
+            ):
+                mean, lower, upper = _mean_confidence_interval(
+                    outcome_condition[outcome_column]
+                )
+                rows.append(
+                    {
+                        "book": book,
+                        "condition": condition,
+                        "ad_type": CONDITION_NAMES[condition],
+                        "outcome": outcome,
+                        "mean": mean,
+                        "ci_lower": lower,
+                        "ci_upper": upper,
+                        "n": len(outcome_condition),
+                    }
+                )
+
+    return pd.DataFrame(rows)
+
+
+def plot_figure3(summary: pd.DataFrame) -> None:
+    """Save a two-panel Figure 3 with point estimates and 95% confidence bars."""
+    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+    colors = {
+        "No Ads": "#d9e7f5",
+        "Plain Ad": "#a9c7e4",
+        "Genre Ad": "#6b9bc8",
+        "Price Ad": "#2f6f9f",
+    }
+    conditions = ["No Ads", "Plain Ad", "Genre Ad", "Price Ad"]
+    books = list(BOOKS)
+    x_positions = np.arange(len(books))
+    width = 0.18
+
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.8), sharey=False)
+    for axis, outcome in zip(axes, ["Search", "Purchase"], strict=True):
+        subset = summary.loc[summary["outcome"].eq(outcome)]
+        for condition_index, condition in enumerate(conditions):
+            condition_data = subset.loc[subset["ad_type"].eq(condition)].set_index("book")
+            x = x_positions + (condition_index - 1.5) * width
+            means = condition_data.loc[books, "mean"].to_numpy()
+            lower = condition_data.loc[books, "ci_lower"].to_numpy()
+            upper = condition_data.loc[books, "ci_upper"].to_numpy()
+            errors = np.vstack([means - lower, upper - means])
+            axis.bar(
+                x,
+                means,
+                width=width,
+                color=colors[condition],
+                edgecolor="black",
+                linewidth=0.5,
+                label=condition,
+            )
+            axis.errorbar(
+                x,
+                means,
+                yerr=errors,
+                fmt="none",
+                ecolor="black",
+                capsize=2,
+                linewidth=0.7,
+            )
+
+        axis.set_xticks(x_positions, books)
+        axis.set_title(
+            "Search rate of the advertised book"
+            if outcome == "Search"
+            else "Purchase rate of the advertised book"
+        )
+        axis.set_ylabel("Probability")
+        axis.grid(axis="y", alpha=0.2)
+        axis.set_axisbelow(True)
+        axis.legend(frameon=False, ncol=2, loc="upper right")
+    fig.suptitle("Estimated Advertising Effects on Searches and Purchases")
+    fig.tight_layout()
+    fig.savefig(FIGURES_DIR / "figure3_ad_effects.png", dpi=300, bbox_inches="tight")
+    fig.savefig(FIGURES_DIR / "figure3_ad_effects.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+
+def main() -> None:
+    data = load_analysis_sample()
+    table = estimate_table1(data)
+    summary = figure3_summary(data)
+    save_table(table, "table1_ad_effects")
+    save_table(summary, "figure3_ad_effects_summary")
+    plot_figure3(summary)
+    print(f"Saved Table 1 and Figure 3 outputs for {len(data):,} participants.")
+
+
+if __name__ == "__main__":
+    main()

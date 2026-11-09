@@ -1,0 +1,25 @@
+book,outcome,effect,estimate,standard_error,p_value,n
+Lost Girls,Search,Plain ad,0.070811,0.012853,0.000000,5932
+Lost Girls,Search,Genre ad,0.048107,0.012487,0.000118,5932
+Lost Girls,Search,Price ad,0.093052,0.013251,0.000000,5932
+Lost Girls,Search,Genre - Plain,-0.022705,0.010383,0.028796,5932
+Lost Girls,Search,Price - Plain,0.022241,0.011290,0.048885,5932
+Lost Girls,Search,Price - Genre,0.044945,0.010871,0.000036,5932
+Lost Girls,Purchase,Plain ad,0.036500,0.009597,0.000144,5932
+Lost Girls,Purchase,Genre ad,0.030910,0.009467,0.001101,5932
+Lost Girls,Purchase,Price ad,0.055750,0.010097,0.000000,5932
+Lost Girls,Purchase,Genre - Plain,-0.005590,0.007954,0.482190,5932
+Lost Girls,Purchase,Price - Plain,0.019250,0.008694,0.026856,5932
+Lost Girls,Purchase,Price - Genre,0.024840,0.008551,0.003687,5932
+Stateline,Search,Plain ad,0.072272,0.012644,0.000000,6032
+Stateline,Search,Genre ad,0.082931,0.012859,0.000000,6032
+Stateline,Search,Price ad,0.085973,0.012853,0.000000,6032
+Stateline,Search,Genre - Plain,0.010659,0.010968,0.331211,6032
+Stateline,Search,Price - Plain,0.013701,0.010961,0.211387,6032
+Stateline,Search,Price - Genre,0.003042,0.011210,0.786117,6032
+Stateline,Purchase,Plain ad,0.057095,0.008588,0.000000,6032
+Stateline,Purchase,Genre ad,0.064060,0.008815,0.000000,6032
+Stateline,Purchase,Price ad,0.068200,0.008870,0.000000,6032
+Stateline,Purchase,Genre - Plain,0.006965,0.008818,0.429605,6032
+Stateline,Purchase,Price - Plain,0.011105,0.008872,0.210768,6032
+Stateline,Purchase,Price - Genre,0.004139,0.009093,0.648948,6032

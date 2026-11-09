@@ -1,0 +1,180 @@
+{
+  "source_repository": "https://github.com/ilyamorozov/adContent",
+  "source_revision": "b9f5c0293fc516949e9e2d294caaab57885614c7",
+  "files": [
+    {
+      "path": "data/raw/books_redeemed/redeemed_books.zip",
+      "bytes": 24750,
+      "sha256": "727d0321b9638be0960d70713d04900089aea3f714cadd2b47300a9c548b06e6",
+      "zip_valid": true,
+      "members": [
+        "redeemed_books.dta"
+      ],
+      "csv_members": []
+    },
+    {
+      "path": "data/raw/google_analytics/wave1/user_chronology.csv.zip",
+      "bytes": 9093001,
+      "sha256": "dedb1e300465ca63062e77fb0c13f23a9bf28afceb78fefcefed7ff506f70b50",
+      "zip_valid": true,
+      "members": [
+        "user_chronology.csv"
+      ],
+      "csv_members": [
+        {
+          "member": "user_chronology.csv",
+          "columns": [
+            "client_id",
+            "time",
+            "page",
+            "type",
+            "category",
+            "action",
+            "label",
+            "value",
+            "count",
+            "source_page",
+            "source_tab"
+          ],
+          "rows": 485177
+        }
+      ]
+    },
+    {
+      "path": "data/raw/google_analytics/wave2/user_chronology.csv.zip",
+      "bytes": 6339091,
+      "sha256": "fe726d48171d8c67c50abe7d22281c08fb57b57dc6c2a699bd0d8dd335e748c2",
+      "zip_valid": true,
+      "members": [
+        "user_chronology.csv"
+      ],
+      "csv_members": [
+        {
+          "member": "user_chronology.csv",
+          "columns": [
+            "client_id",
+            "time",
+            "page",
+            "type",
+            "category",
+            "action",
+            "label",
+            "value",
+            "count",
+            "source_page",
+            "source_tab"
+          ],
+          "rows": 329362
+        }
+      ]
+    },
+    {
+      "path": "data/raw/qualtrics/qualtrics_hashed.zip",
+      "bytes": 7904974,
+      "sha256": "d76f0e7a7eff2e09266b90d784eb44f4b65c56b346bbb76edc5275562fdd4ecd",
+      "zip_valid": true,
+      "members": [
+        "qualtrics_hashed.dta"
+      ],
+      "csv_members": []
+    },
+    {
+      "path": "data/raw/website_design/product_attr_pos.csv",
+      "bytes": 111509,
+      "sha256": "298c51675de69102f43ca5c7bb727a6024be0ab6891fda475556f68341839af1",
+      "columns": [
+        "asin",
+        "Type",
+        "SKU",
+        "Name",
+        "Published",
+        "Is featured?",
+        "Visibility in catalog",
+        "Short description",
+        "Date sale price starts",
+        "Date sale price ends",
+        "Tax status",
+        "Tax class",
+        "In stock?",
+        "Stock",
+        "Low stock amount",
+        "Backorders allowed?",
+        "Sold individually?",
+        "Weight (kg)",
+        "Length (cm)",
+        "Width (cm)",
+        "Height (cm)",
+        "Allow customer reviews?",
+        "Purchase note",
+        "Sale price",
+        "Shipping class",
+        "Download limit",
+        "Download expiry days",
+        "Parent",
+        "Grouped products",
+        "Upsells",
+        "Cross-sells",
+        "External URL",
+        "Button text",
+        "Tags",
+        "passed_price_check",
+        "position",
+        "Description",
+        "ID",
+        "Regular Price",
+        "author",
+        "Categories",
+        "Images"
+      ],
+      "rows": 100
+    },
+    {
+      "path": "data/raw/website_design/product_sorting_full_store.csv",
+      "bytes": 26987,
+      "sha256": "3b07167db484ac057d04ba3e81538f0589c342622bbf2c4154bd21a1c7a493ae",
+      "columns": [
+        "ID",
+        "Name",
+        "amazon_name",
+        "url_name",
+        "amazon_url",
+        "latest_price",
+        "position",
+        "Categories"
+      ],
+      "rows": 100
+    },
+    {
+      "path": "data/raw/woocommerce/order_exp_july5_aug3.csv",
+      "bytes": 775776,
+      "sha256": "424cf1eeae9192f7a40063559e1a496c625fb799945ccb80e8a533eb56aff529",
+      "columns": [
+        "order_id",
+        "order_date",
+        "coupon_code",
+        "book_purchased",
+        "order_total",
+        "bonus_payout",
+        "won_lottery",
+        "amazon_name"
+      ],
+      "rows": 6448
+    },
+    {
+      "path": "data/raw/woocommerce/order_exp_may19_july4.csv",
+      "bytes": 1012262,
+      "sha256": "91b8ed1589641cf9b0e03a5b19a53a6be4d4534ba6cf83857e6da74aa117655b",
+      "columns": [
+        "order_id",
+        "order_date",
+        "coupon_code",
+        "book_purchased",
+        "order_total",
+        "bonus_payout",
+        "won_lottery",
+        "amazon_name"
+      ],
+      "rows": 8518
+    }
+  ]
+}

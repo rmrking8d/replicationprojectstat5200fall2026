@@ -1,0 +1,4 @@
+# Python-generated files and local virtual environments.
+__pycache__/
+*.py[cod]
+.venv/

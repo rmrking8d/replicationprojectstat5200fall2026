@@ -25,7 +25,8 @@ This project will replicate selected results from Section 5, “Experiment
 Results”:
 
 - Tables 1–3, covering estimated advertising effects on searches and purchases
-  and match-value effects of genre advertising.
+  (Table 1), match-value effects of genre advertising (Table 2), and spillovers
+  to similar nonadvertised books (Table 3).
 - Figures 3–5 and their accompanying graphs.
 
 The goal is to reproduce these results using the data and analysis materials
@@ -50,9 +51,18 @@ be saved separately.
 - `results/figures/` — replicated and generated figures
 - `results/tables/` — replicated and generated tables
 
+## Current status
+
+The Python workflow and preliminary tables and figures have been generated.
+The current analysis sample contains 11,502 participants, compared with 11,498
+in the authors' processed data. Some search estimates also differ, so the
+outputs are not yet considered an exact replication. See
+[`code/README.md`](code/README.md) for run instructions and the current
+validation status.
+
 ## Reproducibility
 
-Code, documentation, and generated outputs will be organized in this repository
-to make the analysis reproducible. Instructions for obtaining the data and
-running the Python analysis will be added as the replication workflow is
-developed.
+Instructions for building the analysis data and running the Python scripts are
+in [`code/README.md`](code/README.md). The scripts are separated by analysis,
+and generated tables and figures are saved in their corresponding `results/`
+subfolders.

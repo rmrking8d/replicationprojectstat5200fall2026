@@ -1,0 +1,17 @@
+book,condition,ad_type,outcome,mean,ci_lower,ci_upper,n
+Lost Girls,0,No Ads,Search,0.051948,0.031637,0.072259,462
+Lost Girls,0,No Ads,Purchase,0.028139,0.013003,0.043274,462
+Lost Girls,1,Genre Ad,Search,0.100055,0.086290,0.113820,1829
+Lost Girls,1,Genre Ad,Purchase,0.059049,0.048236,0.069861,1829
+Lost Girls,2,Plain Ad,Search,0.122759,0.107755,0.137764,1841
+Lost Girls,2,Plain Ad,Purchase,0.064639,0.053396,0.075881,1841
+Lost Girls,3,Price Ad,Search,0.145000,0.128719,0.161281,1800
+Lost Girls,3,Price Ad,Purchase,0.083889,0.071070,0.096708,1800
+Stateline,0,No Ads,Search,0.049784,0.029877,0.069690,462
+Stateline,0,No Ads,Purchase,0.017316,0.005377,0.029255,462
+Stateline,4,Genre Ad,Search,0.132714,0.117160,0.148269,1831
+Stateline,4,Genre Ad,Purchase,0.081376,0.068841,0.093911,1831
+Stateline,5,Plain Ad,Search,0.122056,0.107197,0.136914,1868
+Stateline,5,Plain Ad,Purchase,0.074411,0.062499,0.086323,1868
+Stateline,6,Price Ad,Search,0.135756,0.120221,0.151291,1871
+Stateline,6,Price Ad,Purchase,0.085516,0.072833,0.098199,1871

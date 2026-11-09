@@ -1,0 +1,11 @@
+panel,outcome,plain_ad_mean,attribute_ad_mean,estimate,standard_error,p_value,n
+Price advertising,Price sorted low-to-high,0.233217,0.230183,-0.003034,0.009824,0.757455,7380
+Price advertising,Price sorted high-to-low,0.033702,0.028330,-0.005372,0.004035,0.183172,7380
+Price advertising,Searched another cheap book,0.513616,0.507491,-0.006124,0.011639,0.598782,7380
+Price advertising,Bought another cheap book,0.419520,0.423590,0.004070,0.011498,0.723354,7380
+Price advertising,Self-reported price importance,3.030024,3.041485,0.011460,0.031918,0.719565,7361
+Genre advertising,Filtered to advertised genre,0.017255,0.017213,-0.000042,0.003033,0.988895,7369
+Genre advertising,Filtered to any genre,0.060394,0.069672,0.009278,0.005746,0.106412,7369
+Genre advertising,Searched another book of advertised genre,0.281477,0.287432,0.005954,0.010513,0.571155,7369
+Genre advertising,Bought another book of advertised genre,0.198706,0.208470,0.009764,0.009383,0.298079,7369
+Genre advertising,Self-reported genre importance,4.010549,3.997805,-0.012744,0.024404,0.601539,7342
