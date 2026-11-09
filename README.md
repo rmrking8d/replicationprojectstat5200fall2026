@@ -35,9 +35,12 @@ reported in the paper.
 ## Data and materials
 
 The authors' project repository is available at
-[ilyamorozov/adContent](https://github.com/ilyamorozov/adContent). Data and
-other materials used for the replication will be documented here. Raw data
-will be kept unchanged; any processed data will be saved separately.
+[ilyamorozov/adContent](https://github.com/ilyamorozov/adContent). The raw
+input files used for this replication have been downloaded into `data/raw/`
+from a pinned revision of that repository. See
+[`data/raw/README.md`](data/raw/README.md) for the source revision, file
+inventory, and checksums. Raw data will be kept unchanged; processed data will
+be saved separately.
 
 ## Project structure
 
@@ -51,4 +54,5 @@ will be kept unchanged; any processed data will be saved separately.
 
 Code, documentation, and generated outputs will be organized in this repository
 to make the analysis reproducible. Instructions for obtaining the data and
-running the analysis will be added as the replication workflow is developed.
+running the Python analysis will be added as the replication workflow is
+developed.
