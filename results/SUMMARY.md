@@ -2,7 +2,7 @@
 
 *Seven-minute presentation outline*
 
-## 1. Introduction and motivation *(about 2.5 minutes)*
+## 1. Introduction and motivation 
 
 - **Economic question:** Which product attributes should a firm reveal in an
   ad? Does revealing price or genre increase demand for the advertised book,
@@ -71,7 +71,7 @@
   Lead You? We Created a Bookstore to Find Out,” *Marketing Science* 43(5),
   2024.
 
-## 2. Data *(about 45 seconds)*
+## 2. Data
 
 - **Sources:** The authors' public replication package combines Qualtrics
   survey responses, Google Analytics browsing events, and bookstore product
@@ -91,7 +91,7 @@
 - **Design:** Random assignment supports causal treatment comparisons, subject
   to accurate sample construction.
 
-## 3. Models *(about 45 seconds)*
+## 3. Models
 
 - **Tables 1–3:** OLS linear probability models for search and purchase;
   Table 3 also includes self-reported importance. Standard errors use the
@@ -112,8 +112,7 @@
   measure exposure effects; the planned contrasts and Tables 2–3 compare
   informative attribute ads with plain ads, isolating content effects.
 
-## 4. Results and interpretation *(about 2.5 minutes)*
-
+## 4. Results and interpretation 
 - **Table 1 / Figure 3 — Ads raise advertised-book search and purchase relative
   to no ad.**
   - For *Lost Girls*, price ads raise search by **9.3 percentage points**
@@ -153,7 +152,7 @@
   [Figure 4](./figures/figure4_preference_effects.pdf), and
   [Figure 5](./figures/figure5_genre_preferences.pdf).
 
-## 5. Conclusions and limitations *(about 30 seconds)*
+## 5. Conclusions and limitations 
 
 - **Takeaway:** Advertising increases demand for the advertised book; genre
   ads have preference-dependent search effects; measured spillovers are small.
